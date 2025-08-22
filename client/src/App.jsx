@@ -14,44 +14,87 @@ const RequireAuth = ({ children }) => {
   return token ? children : <Navigate to="/" />;
 };
 
-export default function App() {
-  const token = localStorage.getItem('token');
+const Layout = ({ children }) => {
+  return (
+    <div className="flex">
+      <Sidebar />
+      <main className="flex-1">
+        {children}
+      </main>
+    </div>
+  );
+};
 
+export default function App() {
   return (
     <BrowserRouter>
-      <div className="flex">
-        {token && <Sidebar />}
-        <main className={`flex-1 ${token ? '' : 'w-full'}`}>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route 
-              path="/dashboard" 
-              element={<RequireAuth><Dashboard /></RequireAuth>} 
-            />
-            <Route 
-              path="/purchases" 
-              element={<RequireAuth><Purchases /></RequireAuth>} 
-            />
-            <Route 
-              path="/transfers" 
-              element={<RequireAuth><Transfers /></RequireAuth>} 
-            />
-            <Route 
-              path="/assignments" 
-              element={<RequireAuth><AssignmentsExpenditures /></RequireAuth>} 
-            />
-            <Route 
-              path="/auditlog" 
-              element={<RequireAuth><AuditLog /></RequireAuth>} 
-            />
-            <Route 
-              path="/resource-management" 
-              element={<RequireAuth><ResourceManagement /></RequireAuth>} 
-            />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </main>
-      </div>
+      <Routes>
+        {/* Login page without sidebar */}
+        <Route path="/" element={<Login />} />
+        
+        {/* All other pages with sidebar */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <RequireAuth>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </RequireAuth>
+          } 
+        />
+        <Route 
+          path="/purchases" 
+          element={
+            <RequireAuth>
+              <Layout>
+                <Purchases />
+              </Layout>
+            </RequireAuth>
+          } 
+        />
+        <Route 
+          path="/transfers" 
+          element={
+            <RequireAuth>
+              <Layout>
+                <Transfers />
+              </Layout>
+            </RequireAuth>
+          } 
+        />
+        <Route 
+          path="/assignments" 
+          element={
+            <RequireAuth>
+              <Layout>
+                <AssignmentsExpenditures />
+              </Layout>
+            </RequireAuth>
+          } 
+        />
+        <Route 
+          path="/auditlog" 
+          element={
+            <RequireAuth>
+              <Layout>
+                <AuditLog />
+              </Layout>
+            </RequireAuth>
+          } 
+        />
+        <Route 
+          path="/resource-management" 
+          element={
+            <RequireAuth>
+              <Layout>
+                <ResourceManagement />
+              </Layout>
+            </RequireAuth>
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </BrowserRouter>
   );
 }
